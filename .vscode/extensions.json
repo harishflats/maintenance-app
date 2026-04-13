@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "Angular.ng-template",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-playwright.test-for-vscode",
+    "ms-vscode.vscode-typescript-next",
+    "SonarSource.sonarlint-vscode",
+    "GitHub.copilot",
+    "ms-vscode.makefile-tools"
+  ]
+}

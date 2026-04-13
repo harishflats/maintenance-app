@@ -1,0 +1,271 @@
+.user-container {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding-bottom: 30px;
+}
+
+.user-header {
+  background: linear-gradient(135deg, #48c6ef 0%, #06aed5 100%);
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.btn-logout {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.user-content {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 0 15px;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card h2 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.month-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.selector-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.selector-group label {
+  margin-bottom: 8px;
+  color: #666;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+select:focus {
+  outline: none;
+  border-color: #48c6ef;
+  box-shadow: 0 0 0 3px rgba(72, 198, 239, 0.1);
+}
+
+.summary-card {
+  background: linear-gradient(135deg, #48c6ef 0%, #06aed5 100%);
+  color: white;
+}
+
+.month-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.summary-box {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.summary-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.summary-icon.positive {
+  font-size: 32px;
+}
+
+.summary-icon.negative {
+  font-size: 32px;
+}
+
+.summary-label {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-value {
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+}
+
+.summary-value.positive {
+  color: #4ade80;
+}
+
+.summary-value.negative {
+  color: #ff6b6b;
+}
+
+.expense-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: #f5f7fa;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.expense-item:hover {
+  background-color: #eef1f7;
+}
+
+.expense-detail {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.expense-icon {
+  font-size: 24px;
+}
+
+.expense-text {
+  font-weight: 500;
+  color: #333;
+}
+
+.expense-amount {
+  font-size: 18px;
+  font-weight: 600;
+  color: #667eea;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+@media (max-width: 480px) {
+  .user-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .user-header h1 {
+    font-size: 24px;
+  }
+
+  .btn-logout {
+    align-self: center;
+  }
+
+  .card {
+    padding: 15px;
+    margin-bottom: 12px;
+  }
+
+  .card h2 {
+    font-size: 16px;
+  }
+
+  .month-selector {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .summary-box {
+    padding: 12px;
+  }
+
+  .summary-icon {
+    font-size: 28px;
+  }
+
+  .summary-value {
+    font-size: 20px;
+  }
+
+  .month-title {
+    font-size: 18px;
+  }
+
+  .expense-item {
+    padding: 10px;
+  }
+
+  .expense-amount {
+    font-size: 16px;
+  }
+}

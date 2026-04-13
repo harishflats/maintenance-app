@@ -1,0 +1,94 @@
+<div class="user-container">
+  <header class="user-header">
+    <h1>Maintenance Tracker</h1>
+    <button class="btn-logout" (click)="logout()">Logout</button>
+  </header>
+
+  <main class="user-content">
+    <!-- Month Selector Card -->
+    <div class="card">
+      <div class="month-selector" style="display: flex; gap: 15px;">
+        <div class="selector-group" style="flex: 1; margin-bottom: 0;">
+          <label>Year</label>
+          <select [(ngModel)]="maintenanceData.year" (change)="onMonthChange()" style="width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; font-family: inherit; background-color: #fff; box-sizing: border-box;">
+            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+          </select>
+        </div>
+        <div class="selector-group" style="flex: 1; margin-bottom: 0;">
+          <label>Month</label>
+          <select [(ngModel)]="maintenanceData.month" (change)="onMonthChange()" style="width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; font-family: inherit; background-color: #fff; box-sizing: border-box;">
+            <option *ngFor="let month of months" [value]="month.value">{{ month.label }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Card -->
+    <div class="card summary-card">
+      <div class="month-title">
+        {{ getMonthLabel() }} {{ maintenanceData.year }}
+      </div>
+
+      <div class="summary-grid" style="display: flex; flex-direction: row; gap: 8px; overflow-x: auto; padding: 10px 5px;">
+        <div class="summary-box" style="flex: 1; min-width: 100px; padding: 10px 5px; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div class="summary-icon" style="font-size: 1.5rem; margin-bottom: 5px;">💰</div>
+          <div class="summary-label" style="font-size: 0.75rem; color: #666; text-transform: uppercase; font-weight: bold; margin-bottom: 5px;">Collected</div>
+          <div class="summary-value" style="font-size: 1.1rem; font-weight: bold; color: #333;">₹{{ summary.collected | number: '1.2-2' }}</div>
+        </div>
+
+        <div class="summary-box" style="flex: 1; min-width: 100px; padding: 10px 5px; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div class="summary-icon" style="font-size: 1.5rem; margin-bottom: 5px;">📤</div>
+          <div class="summary-label" style="font-size: 0.75rem; color: #666; text-transform: uppercase; font-weight: bold; margin-bottom: 5px;">Spent</div>
+          <div class="summary-value" style="font-size: 1.1rem; font-weight: bold; color: #e74c3c;">₹{{ summary.spent | number: '1.2-2' }}</div>
+        </div>
+
+        <div class="summary-box" style="flex: 1; min-width: 100px; padding: 10px 5px; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div class="summary-icon" style="font-size: 1.5rem; margin-bottom: 5px;">
+            {{ summary.balance >= 0 ? '✅' : '⚠️' }}
+          </div>
+          <div class="summary-label" style="font-size: 0.75rem; color: #666; text-transform: uppercase; font-weight: bold; margin-bottom: 5px;">Monthly Balance</div>
+          <div class="summary-value" style="font-size: 1.1rem; font-weight: bold;" [ngStyle]="{'color': summary.balance >= 0 ? '#2ecc71' : '#e74c3c'}">
+            ₹{{ summary.balance | number: '1.2-2' }}
+          </div>
+        </div>
+
+        <div class="summary-box" style="flex: 1; min-width: 100px; padding: 10px 5px; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div class="summary-icon" style="font-size: 1.5rem; margin-bottom: 5px;">
+            {{ summary.overallBalance >= 0 ? '🏦' : '📉' }}
+          </div>
+          <div class="summary-label" style="font-size: 0.75rem; color: #666; text-transform: uppercase; font-weight: bold; margin-bottom: 5px;">Overall Balance</div>
+          <div class="summary-value" style="font-size: 1.1rem; font-weight: bold;" [ngStyle]="{'color': summary.overallBalance >= 0 ? '#2ecc71' : '#e74c3c'}">
+            ₹{{ summary.overallBalance | number: '1.2-2' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expense Breakdown Card -->
+    <div class="card">
+      <h2>Expense Breakdown</h2>
+      <div class="expense-list">
+        <div class="expense-item" *ngFor="let expense of maintenanceData.expenses">
+          <div class="expense-detail">
+            <div class="expense-icon">🧾</div>
+            <div class="expense-text">{{ expense.type || 'Unnamed Expense' }}</div>
+          </div>
+          <div class="expense-amount">₹{{ expense.amount | number: '1.2-2' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collection Info Card -->
+    <div class="card">
+      <h2>Collection Info</h2>
+      <div class="info-item">
+        <span class="info-label">Amount per Member</span>
+        <span class="info-value">₹{{ maintenanceData.amountPerPerson | number: '1.2-2' }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Paid Members</span>
+        <span class="info-value">{{ maintenanceData.paidMembers }}</span>
+      </div>
+    </div>
+  </main>
+</div>
