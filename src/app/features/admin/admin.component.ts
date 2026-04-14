@@ -121,6 +121,19 @@ export class AdminComponent implements OnInit, OnDestroy {
     });
   }
 
+  sendWhatsAppMessage(): void {
+    const amount = this.maintenanceData.amountPerPerson || 10;
+    const monthName = this.months.find(m => m.value === this.maintenanceData.month)?.label || '';
+    const year = this.maintenanceData.year;
+    
+    // Construct the WhatsApp message body
+    const message = `Hello,\n\nPlease pay the maintenance amount of ₹${amount} for ${monthName} ${year}.`;
+    
+    // Redirect to WhatsApp with the pre-filled message text
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

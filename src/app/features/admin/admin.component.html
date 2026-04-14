@@ -8,7 +8,12 @@
         </span>
       </div>
     </div>
-    <button class="btn btn-logout" (click)="logout()">Logout</button>
+    <div class="admin-header-right">
+      <button class="btn btn-whatsapp" (click)="sendWhatsAppMessage()">
+        Share via WhatsApp
+      </button>
+      <button class="btn btn-logout" (click)="logout()">Logout</button>
+    </div>
   </header>
 
   <main class="admin-main">

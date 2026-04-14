@@ -20,7 +20,7 @@
   font-size: 1.75rem;
 }
 
-..user-header-left {
+.user-header-left {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -34,7 +34,8 @@
 }
 
 .user-overall-balance {
-  font-size: 0.95rem;
+  font-size: 1.2rem;
+  font-weight: 600;
   color: rgba(255, 255, 255, 0.95);
 }
 
@@ -251,6 +252,17 @@ select:focus {
   color: #2f3d62;
 }
 
+/* Total Breakdown Expense Styles */
+.total-expense-row {
+  border-top: 2px dashed #d7dce8;
+  margin-top: 0.5rem;
+  background-color: transparent;
+}
+
+.total-expense-row:hover {
+  background-color: transparent;
+}
+
 @media (max-width: 720px) {
   .user-header {
     flex-direction: row;
@@ -288,4 +300,3 @@ select:focus {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-

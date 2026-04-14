@@ -2,7 +2,7 @@
   <header class="user-header">
     <div class="user-header-left">
       <h1>Maintenance Tracker</h1>
-      <div class="user-overall-balance" *ngIf="isCurrentMonth()">
+      <div class="user-overall-balance">
         Overall Balance: <span [ngClass]="{'positive': summary.overallBalance >= 0, 'negative': summary.overallBalance < 0}">
           ₹{{ summary.overallBalance | number: '1.2-2' }}
         </span>
@@ -61,6 +61,11 @@
             <span class="expense-text">{{ expense.type || 'Unnamed Expense' }}</span>
           </div>
           <div class="expense-amount">₹{{ expense.amount | number: '1.2-2' }}</div>
+        </div>
+        
+        <div class="expense-item total-expense-row">
+          <div class="expense-text"><strong>Total Expenses</strong></div>
+          <div class="expense-amount spent"><strong>₹{{ summary.spent | number: '1.2-2' }}</strong></div>
         </div>
       </div>
     </section>
