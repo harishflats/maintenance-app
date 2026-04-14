@@ -70,6 +70,11 @@ export class UserComponent implements OnInit, OnDestroy {
     this.dataService.setMonth(this.maintenanceData.year, this.maintenanceData.month);
   }
 
+  isCurrentMonth(): boolean {
+    const now = new Date();
+    return this.maintenanceData.year === now.getFullYear() && this.maintenanceData.month === now.getMonth() + 1;
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

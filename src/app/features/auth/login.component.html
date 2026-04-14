@@ -4,21 +4,20 @@
     <p class="subtitle">Select your role to continue</p>
 
     <div class="button-container">
-      <!-- Admin Locked View -->
-      <div *ngIf="!isAdminUnlocked" style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #eee; display: flex; flex-direction: column; gap: 10px;">
-        <div style="color: #666; font-size: 14px; font-weight: bold;">Admin Access</div>
-        <input type="password" 
-               [(ngModel)]="adminPassword" 
-               (keyup.enter)="unlockAdmin()"
-               placeholder="Enter Password" 
-               style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-family: inherit; font-size: 1rem; box-sizing: border-box;" />
-        <button class="btn btn-primary" (click)="unlockAdmin()" style="padding: 12px;">
-          <div class="btn-text" style="font-size: 16px;">🔒 Unlock Admin</div>
+      <div *ngIf="!isAdminUnlocked" class="admin-access-card">
+        <span class="admin-access-title">Admin Access</span>
+        <input
+          type="password"
+          [(ngModel)]="adminPassword"
+          (keyup.enter)="unlockAdmin()"
+          placeholder="Enter Password"
+        />
+        <button class="btn btn-primary" (click)="unlockAdmin()">
+          <div class="btn-text">🔒 Unlock Admin</div>
         </button>
       </div>
 
-      <!-- Admin Unlocked View -->
-      <button *ngIf="isAdminUnlocked" class="btn btn-primary" (click)="loginAsAdmin()" style="background-color: #4ade80;">
+      <button *ngIf="isAdminUnlocked" class="btn btn-secondary-success" (click)="loginAsAdmin()">
         <div class="btn-icon">🔓</div>
         <div class="btn-text">Enter Admin Panel</div>
         <div class="btn-desc">Manage finances</div>
