@@ -17,10 +17,14 @@ export class LoginComponent {
   ) {}
 
   unlockAdmin(): void {
-    if (this.adminPassword === 'admin123') {
+  
+    const today = new Date();
+    const expectedPassword = `admin${today.getFullYear()}${today.getMonth() + 1}`;
+
+    if (this.adminPassword === expectedPassword) {
       this.isAdminUnlocked = true;
     } else {
-      alert('Incorrect password! Please try again.');
+      alert('Incorrect password. Please try again.');
       this.adminPassword = '';
     }
   }
