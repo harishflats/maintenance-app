@@ -29,6 +29,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   ];
   years: number[] = [];
   savedMessage = '';
+  dbStatusMessage = '';
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -42,9 +43,14 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.testDb();
+
+    // Fetch real data from backend on load
+    this.dataService.fetchData(this.maintenanceData.year, this.maintenanceData.month);
+
     this.dataService.maintenanceData$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(data => {
+      .subscribe((data: MaintenanceData) => {
         this.maintenanceData = data;
         this.summary = this.dataService.getSummary();
       });
@@ -106,6 +112,22 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.dataService.removeExpense(id);
   }
 
+  testDb(): void {
+    this.dbStatusMessage = 'Testing DB connection...';
+    this.dataService.testDbConnection(this.maintenanceData.year, this.maintenanceData.month).subscribe({
+      next: (response) => {
+        this.dbStatusMessage = response?.message ?? 'Connection to DB successful!';
+        console.log('DB connection test successful', response);
+        setTimeout(() => (this.dbStatusMessage = ''), 5000);
+      },
+      error: (err) => {
+        this.dbStatusMessage = 'Failed to connect to DB. See console for details.';
+        console.error('Error testing DB connection', err);
+        setTimeout(() => (this.dbStatusMessage = ''), 5000);
+      },
+    });
+  }
+
   save(): void {
     this.dataService.saveData().subscribe({
       next: () => {
@@ -113,6 +135,9 @@ export class AdminComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.savedMessage = '';
         }, 2000);
+        
+        // Fetch newly updated data for this period
+        this.dataService.fetchData(this.maintenanceData.year, this.maintenanceData.month);
       },
       error: (err) => {
         console.error('Error saving to MongoDB', err);

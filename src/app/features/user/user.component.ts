@@ -41,9 +41,12 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Fetch real data from backend on load
+    this.dataService.fetchData(this.maintenanceData.year, this.maintenanceData.month);
+
     this.dataService.maintenanceData$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(data => {
+      .subscribe((data: MaintenanceData) => {
         this.maintenanceData = data;
         this.summary = this.dataService.getSummary();
       });
