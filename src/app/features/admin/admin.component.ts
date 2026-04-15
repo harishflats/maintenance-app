@@ -43,7 +43,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.testDb();
+   
 
     // Fetch real data from backend on load
     this.dataService.fetchData(this.maintenanceData.year, this.maintenanceData.month);
@@ -110,22 +110,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   removeExpense(id: string): void {
     this.dataService.removeExpense(id);
-  }
-
-  testDb(): void {
-    this.dbStatusMessage = 'Testing DB connection...';
-    this.dataService.testDbConnection(this.maintenanceData.year, this.maintenanceData.month).subscribe({
-      next: (response) => {
-        this.dbStatusMessage = response?.message ?? 'Connection to DB successful!';
-        console.log('DB connection test successful', response);
-        setTimeout(() => (this.dbStatusMessage = ''), 5000);
-      },
-      error: (err) => {
-        this.dbStatusMessage = 'Failed to connect to DB. See console for details.';
-        console.error('Error testing DB connection', err);
-        setTimeout(() => (this.dbStatusMessage = ''), 5000);
-      },
-    });
   }
 
   save(): void {
