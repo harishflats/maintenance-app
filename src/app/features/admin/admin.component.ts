@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService, MaintenanceData, Summary } from '../../core/services/data.service';
 import { AuthService } from '../auth/auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -35,7 +35,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: DataService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.maintenanceData = this.dataService.getCurrentData();
     this.summary = this.dataService.getSummary();
@@ -50,8 +51,24 @@ export class AdminComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Fetch real data from backend on load
-    this.dataService.fetchData(this.maintenanceData.year, this.maintenanceData.month);
+    // React to query parameters and fetch data accordingly
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      const monthParam = params['month'];
+      let fetchMonth = this.maintenanceData.month;
+
+      if (monthParam) {
+        const foundMonth = this.months.find(m => m.label.toLowerCase() === String(monthParam).toLowerCase());
+        if (foundMonth) {
+          fetchMonth = foundMonth.value;
+          if (fetchMonth !== this.maintenanceData.month) {
+            this.dataService.setMonth(this.maintenanceData.year, fetchMonth);
+          }
+        }
+      }
+
+      // Fetch real data from backend
+      this.dataService.fetchData(this.maintenanceData.year, fetchMonth);
+    });
 
     this.dataService.maintenanceData$
       .pipe(takeUntil(this.destroy$))
