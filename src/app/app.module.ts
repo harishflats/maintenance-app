@@ -4,6 +4,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthModule } from './features/auth/auth.module';
+import { AdminModule } from './features/admin/admin.module';
+import { UserModule } from './features/user/user.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +16,9 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     CoreModule,
     HttpClientModule,
+    AuthModule,
+    AdminModule,
+    UserModule,
     AppRoutingModule
   ],
   providers: [],

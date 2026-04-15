@@ -43,7 +43,12 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-   
+    // Ensure only an admin can access this page.
+    // This check is a safeguard; the AuthGuard should be the primary protection.
+    if (localStorage.getItem('user_role') !== 'admin') {
+      this.router.navigate(['/login']);
+      return;
+    }
 
     // Fetch real data from backend on load
     this.dataService.fetchData(this.maintenanceData.year, this.maintenanceData.month);
