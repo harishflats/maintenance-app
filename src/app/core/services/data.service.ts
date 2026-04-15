@@ -32,7 +32,27 @@ export class DataService {
   //private apiUrl = 'http://localhost:3001/api/maintenance';
   private apiUrl ='https://maintenance-backend-zyo9.onrender.com/api/maintenance';
 
-  constructor(private http: HttpClient) {}
+  private allHistoricalData: any[] = [];
+
+  constructor(private http: HttpClient) {
+    this.refreshHistoricalData();
+  }
+
+  private refreshHistoricalData(): void {
+    this.http.get<any>(this.apiUrl).subscribe({
+      next: (response) => {
+        if (Array.isArray(response)) {
+          this.allHistoricalData = response;
+        } else if (response) {
+          this.allHistoricalData = [response];
+        } else {
+          this.allHistoricalData = [];
+        }
+        this.maintenanceDataSubject.next({ ...this.maintenanceDataSubject.value });
+      },
+      error: (err) => console.error('Error fetching historical data', err)
+    });
+  }
 
   private getDefaultData(year: number, month: number): MaintenanceData {
     return {
@@ -78,14 +98,7 @@ export class DataService {
   private getInitialData(): MaintenanceData {
     const year = new Date().getFullYear();
     const month = new Date().getMonth() + 1;
-    const key = `maintenance_${year}_${month}`;
-    const stored = localStorage.getItem(key);
-    return stored ? this.normalizeData(JSON.parse(stored), year, month) : this.getDefaultData(year, month);
-  }
-
-  private getStorageKey(): string {
-    const data = this.maintenanceDataSubject.value;
-    return `maintenance_${data.year}_${data.month}`;
+    return this.getDefaultData(year, month);
   }
 
   getCurrentData(): MaintenanceData {
@@ -94,7 +107,6 @@ export class DataService {
 
   setCurrentData(data: MaintenanceData): void {
     this.maintenanceDataSubject.next(data);
-    this.saveToStorage(data);
   }
 
   updateAmountPerPerson(amount: number): void {
@@ -146,9 +158,7 @@ export class DataService {
   }
 
   setMonth(year: number, month: number): void {
-    const key = `maintenance_${year}_${month}`;
-    const stored = localStorage.getItem(key);
-    const newData = stored ? this.normalizeData(JSON.parse(stored), year, month) : this.getDefaultData(year, month);
+    const newData = this.getDefaultData(year, month);
     this.maintenanceDataSubject.next(newData);
 
     // Fetch latest data from the backend when month changes
@@ -168,29 +178,20 @@ export class DataService {
   private calculateOverallBalance(): number {
     let totalBalance = 0;
     const currentData = this.maintenanceDataSubject.value;
-    const currentKey = `maintenance_${currentData.year}_${currentData.month}`;
 
-    // 1. Sum up all balances from past saved months (excluding current active month)
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith('maintenance_') && key !== currentKey) {
-        try {
-          const stored = localStorage.getItem(key);
-          if (stored) {
-            const data = this.normalizeData(JSON.parse(stored));
-            const collected = (data.amountPerPerson || 0) * (data.paidMembers || 0);
-            const spent = (data.expenses || []).reduce((sum, exp) => sum + (exp.amount || 0), 0);
-            totalBalance += (collected - spent);
-          }
-        } catch (e) {
-          console.error('Error parsing stored data for overall balance', e);
-        }
+    // Add all historical data EXCEPT the current active month
+    this.allHistoricalData.forEach(item => {
+      if (Number(item.year) === Number(currentData.year) && Number(item.month) === Number(currentData.month)) {
+        return; // Skip current active month so we don't double count it
       }
-    }
+      const collected = (Number(item.amountPerPerson) || 0) * (Number(item.paidMembers) || 0);
+      const spent = (item.expenses || []).reduce((sum: number, exp: any) => sum + (Number(exp.amount) || 0), 0);
+      totalBalance += (collected - spent);
+    });
 
-    // 2. Add the active in-memory month (so unsaved changes instantly reflect)
-    const currentCollected = (currentData?.amountPerPerson || 0) * (currentData?.paidMembers || 0);
-    const currentSpent = (currentData?.expenses || []).reduce((sum: number, exp: any) => sum + (exp?.amount || 0), 0);
+    // Calculate the active in-memory month
+    const currentCollected = (Number(currentData?.amountPerPerson) || 0) * (Number(currentData?.paidMembers) || 0);
+    const currentSpent = (currentData?.expenses || []).reduce((sum: number, exp: any) => sum + (Number(exp?.amount) || 0), 0);
     totalBalance += (currentCollected - currentSpent);
 
     return totalBalance;
@@ -198,7 +199,6 @@ export class DataService {
 
   saveData(): Observable<any> {
     const data = this.maintenanceDataSubject.value;
-    this.saveToStorage(data);
     return this.http.post(this.apiUrl, data);
   }
 
@@ -218,16 +218,16 @@ export class DataService {
           if (targetData) {
             normalized = this.normalizeData(targetData, year, month);
           } else {
-            // DB empty; use drafted localized storage data or pristine defaults
-            const key = `maintenance_${year}_${month}`;
-            const stored = localStorage.getItem(key);
-            normalized = stored ? this.normalizeData(JSON.parse(stored), year, month) : this.getDefaultData(year, month);
+            // DB empty; use pristine defaults
+            normalized = this.getDefaultData(year, month);
           }
           this.maintenanceDataSubject.next(normalized);
-          this.saveToStorage(normalized);
         },
         error: (err) => console.error('Error fetching data from API', err)
       });
+
+    // Fetch all historical data simultaneously to keep overall balance accurate
+    this.refreshHistoricalData();
   }
 
   testDbConnection(year: number, month: number): Observable<any> {
@@ -235,14 +235,7 @@ export class DataService {
     return this.http.get(testDbUrl, { params: { year: year != null ? year.toString() : '', month: month != null ? month.toString() : '' } });
   }
 
-  private saveToStorage(data: MaintenanceData): void {
-    const key = `maintenance_${data.year}_${data.month}`;
-    localStorage.setItem(key, JSON.stringify(data));
-  }
-
   clearData(): void {
-    const key = this.getStorageKey();
-    localStorage.removeItem(key);
     const current = this.maintenanceDataSubject.value;
     this.maintenanceDataSubject.next(this.getDefaultData(current.year, current.month));
   }
