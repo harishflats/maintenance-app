@@ -158,9 +158,6 @@ export class DataService {
   }
 
   setMonth(year: number, month: number): void {
-    const newData = this.getDefaultData(year, month);
-    this.maintenanceDataSubject.next(newData);
-
     // Fetch latest data from the backend when month changes
     this.fetchData(year, month);
   }

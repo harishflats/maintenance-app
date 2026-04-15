@@ -69,8 +69,12 @@ export class UserComponent implements OnInit, OnDestroy {
     return month ? month.label : '';
   }
 
-  onMonthChange(): void {
-    this.dataService.setMonth(this.maintenanceData.year, this.maintenanceData.month);
+  onDateChange(change: { year?: number; month?: number }): void {
+    const newYear = change.year !== undefined ? change.year : this.maintenanceData.year;
+    const newMonth = change.month !== undefined ? change.month : this.maintenanceData.month;
+    if (newYear !== this.maintenanceData.year || newMonth !== this.maintenanceData.month) {
+      this.dataService.setMonth(newYear, newMonth);
+    }
   }
 
   isCurrentMonth(): boolean {

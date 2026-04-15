@@ -21,13 +21,13 @@
       <div class="form-row month-selector">
         <div class="form-col">
           <label>Year</label>
-          <select [(ngModel)]="maintenanceData.year" (change)="onMonthChange()">
+          <select [ngModel]="maintenanceData.year" (ngModelChange)="onDateChange({ year: $event })">
             <option *ngFor="let year of years" [value]="year">{{ year }}</option>
           </select>
         </div>
         <div class="form-col">
           <label>Month</label>
-          <select [(ngModel)]="maintenanceData.month" (change)="onMonthChange()">
+          <select [ngModel]="maintenanceData.month" (ngModelChange)="onDateChange({ month: $event })">
             <option *ngFor="let month of months" [value]="month.value">{{ month.label }}</option>
           </select>
         </div>
