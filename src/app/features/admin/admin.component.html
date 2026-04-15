@@ -124,6 +124,20 @@
       </div>
     </section>
 
+    <section class="card">
+      <div class="card-header">
+        <h2>Comments</h2>
+      </div>
+      <div class="form-row">
+        <textarea
+          style="width: 100%;"
+          [ngModel]="maintenanceData.comments"
+          (change)="onCommentsChange($any($event.target).value)"
+          placeholder="Add any comments here..."
+          rows="4"></textarea>
+      </div>
+    </section>
+
     <div class="action-row">
       <button class="btn btn-save" (click)="save()">Save Data</button>
     </div>

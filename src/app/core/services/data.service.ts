@@ -14,6 +14,7 @@ export interface MaintenanceData {
   amountPerPerson: number;
   paidMembers: number;
   expenses: ExpenseItem[];
+  comments: string;
 }
 
 export interface Summary {
@@ -64,7 +65,8 @@ export class DataService {
         { id: '1', type: 'Maid', amount: 0 },
         { id: '2', type: 'EB Bill', amount: 0 },
         { id: '3', type: 'Others', amount: 0 }
-      ]
+      ],
+      comments: ''
     };
   }
 
@@ -92,6 +94,7 @@ export class DataService {
     
     data.year = year;
     data.month = month;
+    data.comments = data.comments || '';
     return data as MaintenanceData;
   }
 
@@ -112,6 +115,12 @@ export class DataService {
   updateAmountPerPerson(amount: number): void {
     const current = this.maintenanceDataSubject.value;
     current.amountPerPerson = amount;
+    this.maintenanceDataSubject.next({ ...current });
+  }
+
+  updateComments(comments: string): void {
+    const current = this.maintenanceDataSubject.value;
+    current.comments = comments;
     this.maintenanceDataSubject.next({ ...current });
   }
 

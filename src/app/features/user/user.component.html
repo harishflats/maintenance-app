@@ -83,5 +83,14 @@
         </div>
       </div>
     </section>
+
+    <section class="card" *ngIf="maintenanceData.comments">
+      <h2>Comments</h2>
+      <div class="info-list">
+        <div class="comments-display" style="white-space: pre-wrap; padding: 12px; background: #f8f9fa; border-radius: 6px; border: 1px solid #dcdfe6; width: 100%; line-height: 1.5; color: #333; font-family: inherit;">
+          {{ maintenanceData.comments }}
+        </div>
+      </div>
+    </section>
   </main>
 </div>

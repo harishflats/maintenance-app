@@ -85,6 +85,10 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.dataService.updateAmountPerPerson(value);
   }
 
+  onCommentsChange(value: string): void {
+    this.dataService.updateComments(value);
+  }
+
   onAmountPerPersonInput(event: any): void {
     const value = parseFloat(event.target.value) || 0;
     this.dataService.updateAmountPerPerson(value);
