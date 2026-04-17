@@ -161,12 +161,16 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   sendWhatsAppMessage(): void {
-    const amount = this.maintenanceData.amountPerPerson || 10;
-    const monthName = this.months.find(m => m.value === this.maintenanceData.month)?.label || '';
-    const year = this.maintenanceData.year;
+    const amount = this.maintenanceData.amountPerPerson || 1000;
     
+    let targetMonthValue = this.maintenanceData.month - 1;
+    if (targetMonthValue === 0) {
+      targetMonthValue = 12; // Wrap around to December if current month is January
+    }
+    const targetMonthLabel = this.months.find(m => m.value === targetMonthValue)?.label || '';
+
     // Construct the WhatsApp message body
-    const message = `Hello,\n\nPlease pay the maintenance amount of ₹${amount} for ${monthName} ${year}.`;
+    const message = `Dear all,\nHope you’re all doing good! Please send the maintenance amount of ₹${amount} for the month of ${targetMonthLabel} Once received we’ll share the expense split-up sheet with you all. Thanks everyone! 🙌`;
     
     // Redirect to WhatsApp with the pre-filled message text
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
