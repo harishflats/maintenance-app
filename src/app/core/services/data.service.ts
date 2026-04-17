@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 export interface ExpenseItem {
   id: string;
@@ -33,26 +34,10 @@ export class DataService {
   //private apiUrl = 'http://localhost:3001/api/maintenance';
   private apiUrl ='https://maintenance-backend-zyo9.onrender.com/api/maintenance';
 
-  private allHistoricalData: any[] = [];
+  private overallBalance: number = 0;
 
   constructor(private http: HttpClient) {
-    this.refreshHistoricalData();
-  }
-
-  private refreshHistoricalData(): void {
-    this.http.get<any>(this.apiUrl).subscribe({
-      next: (response) => {
-        if (Array.isArray(response)) {
-          this.allHistoricalData = response;
-        } else if (response) {
-          this.allHistoricalData = [response];
-        } else {
-          this.allHistoricalData = [];
-        }
-        this.maintenanceDataSubject.next({ ...this.maintenanceDataSubject.value });
-      },
-      error: (err) => console.error('Error fetching historical data', err)
-    });
+    this.fetchOverallBalance();
   }
 
   private getDefaultData(year: number, month: number): MaintenanceData {
@@ -176,64 +161,47 @@ export class DataService {
     const collected = (data?.amountPerPerson || 0) * (data?.paidMembers || 0);
     const spent = (data?.expenses || []).reduce((total: number, expense: any) => total + (expense?.amount || 0), 0);
     const balance = collected - spent;
-    const overallBalance = this.calculateOverallBalance();
+    const overallBalance = this.overallBalance;
 
     return { collected, spent, balance, overallBalance };
   }
 
-  private calculateOverallBalance(): number {
-    let totalBalance = 0;
-    const currentData = this.maintenanceDataSubject.value;
-
-    // Add all historical data EXCEPT the current active month
-    this.allHistoricalData.forEach(item => {
-      if (Number(item.year) === Number(currentData.year) && Number(item.month) === Number(currentData.month)) {
-        return; // Skip current active month so we don't double count it
-      }
-      const collected = (Number(item.amountPerPerson) || 0) * (Number(item.paidMembers) || 0);
-      const spent = (item.expenses || []).reduce((sum: number, exp: any) => sum + (Number(exp.amount) || 0), 0);
-      totalBalance += (collected - spent);
+  fetchOverallBalance(): void {
+    this.http.get<any>(`${this.apiUrl}/overall-balance`).subscribe({
+      next: (response) => {
+        this.overallBalance = typeof response === 'number' ? response : (response?.overallBalance || 0);
+        // Emit the current data so UI components recalculate their summaries
+        this.maintenanceDataSubject.next(this.maintenanceDataSubject.value);
+      },
+      error: (err) => console.error('Error fetching overall balance', err)
     });
-
-    // Calculate the active in-memory month
-    const currentCollected = (Number(currentData?.amountPerPerson) || 0) * (Number(currentData?.paidMembers) || 0);
-    const currentSpent = (currentData?.expenses || []).reduce((sum: number, exp: any) => sum + (Number(exp?.amount) || 0), 0);
-    totalBalance += (currentCollected - currentSpent);
-
-    return totalBalance;
   }
 
   saveData(): Observable<any> {
     const data = this.maintenanceDataSubject.value;
-    return this.http.post(this.apiUrl, data);
+    return this.http.post(this.apiUrl, data).pipe(
+      tap(() => this.fetchOverallBalance())
+    );
   }
 
   fetchData(year: number, month: number): void {
-    this.http.get<any>(this.apiUrl, { params: { year: year != null ? year.toString() : '', month: month != null ? month.toString() : '' } })
-      .subscribe({
+    this.http.get<any>(`${this.apiUrl}/${year}/${month}`).subscribe({
         next: (response) => {
           let normalized: MaintenanceData;
-          let targetData = null;
 
-          if (response && Array.isArray(response)) {
-            targetData = response.find((item: any) => Number(item.year) === Number(year) && Number(item.month) === Number(month));
-          } else if (response && !Array.isArray(response) && Number(response.year) === Number(year) && Number(response.month) === Number(month)) {
-            targetData = response;
-          }
-
-          if (targetData) {
-            normalized = this.normalizeData(targetData, year, month);
+          if (response) {
+            normalized = this.normalizeData(response, year, month);
           } else {
             // DB empty; use pristine defaults
             normalized = this.getDefaultData(year, month);
           }
           this.maintenanceDataSubject.next(normalized);
         },
-        error: (err) => console.error('Error fetching data from API', err)
+        error: (err) => {
+          console.error('Error fetching data from API', err);
+          this.maintenanceDataSubject.next(this.getDefaultData(year, month));
+        }
       });
-
-    // Fetch all historical data simultaneously to keep overall balance accurate
-    this.refreshHistoricalData();
   }
 
   testDbConnection(year: number, month: number): Observable<any> {
