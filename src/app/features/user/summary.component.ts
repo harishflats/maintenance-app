@@ -11,6 +11,8 @@ import { DataService } from '../../core/services/data.service';
 export class SummaryComponent implements OnInit {
   summaryData: any[] = [];
   totalBalance: string | number = 0;
+  isTotalNegative: boolean = false;
+  isTotalPositive: boolean = false;
 
   constructor(private http: HttpClient, private router: Router, private dataService: DataService) {}
 
@@ -37,7 +39,9 @@ export class SummaryComponent implements OnInit {
             year: item.year,
             collectedAmount,
             spentAmount,
-            monthBalance
+            monthBalance,
+            isNegative: monthBalance < 0,
+            isPositive: monthBalance > 0
           };
         }).sort((a, b) => b.year - a.year || b.monthIndex - a.monthIndex); // Sort by year desc, then month desc
         this.calculateTotalBalance();
@@ -47,7 +51,8 @@ export class SummaryComponent implements OnInit {
           ...item,
           collectedAmount: '₹' + item.collectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
           spentAmount: '₹' + item.spentAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-          monthBalance: '₹' + item.monthBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+          monthBalanceRaw: item.monthBalance,
+          monthBalance: (item.monthBalance < 0 ? '-' : '') + '₹' + Math.abs(item.monthBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
         }));
       },
       (error) => {
@@ -58,7 +63,9 @@ export class SummaryComponent implements OnInit {
 
   calculateTotalBalance(): void {
     const total = this.summaryData.reduce((sum, item) => sum + item.monthBalance, 0);
-    this.totalBalance = '₹' + total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    this.isTotalNegative = total < 0;
+    this.isTotalPositive = total > 0;
+    this.totalBalance = (total < 0 ? '-' : '') + '₹' + Math.abs(total).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   goBack(): void {

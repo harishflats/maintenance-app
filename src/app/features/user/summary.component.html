@@ -18,13 +18,17 @@
         <td>{{ item.month }} {{ item.year }}</td>
         <td>{{ item.collectedAmount }}</td>
         <td>{{ item.spentAmount }}</td>
-        <td>{{ item.monthBalance }}</td>
+        <td [ngStyle]="{'color': item.isNegative ? '#ff4d4d' : (item.isPositive ? '#4ade80' : 'inherit')}">
+          {{ item.monthBalance }}
+        </td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
         <td colspan="3">Total Balance</td>
-        <td>{{ totalBalance }}</td>
+        <td [ngStyle]="{'color': isTotalNegative ? '#ff4d4d' : (isTotalPositive ? '#4ade80' : 'inherit')}">
+          {{ totalBalance }}
+        </td>
       </tr>
     </tfoot>
   </table>
