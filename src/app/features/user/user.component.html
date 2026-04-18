@@ -1,7 +1,7 @@
 <div class="user-page">
   <header class="user-header">
     <div class="user-header-left">
-      <h1>Maintenance Tracker</h1>
+      <h1>Maintenance</h1>
       <div class="user-overall-balance">
         Overall Balance: <span [ngClass]="{'positive': summary.overallBalance >= 0, 'negative': summary.overallBalance < 0}">
           ₹{{ summary.overallBalance | number: '1.2-2' }}

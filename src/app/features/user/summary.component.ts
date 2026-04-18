@@ -10,7 +10,7 @@ import { DataService } from '../../core/services/data.service';
 })
 export class SummaryComponent implements OnInit {
   summaryData: any[] = [];
-  totalBalance: number = 0;
+  totalBalance: string | number = 0;
 
   constructor(private http: HttpClient, private router: Router, private dataService: DataService) {}
 
@@ -41,6 +41,14 @@ export class SummaryComponent implements OnInit {
           };
         }).sort((a, b) => b.year - a.year || b.monthIndex - a.monthIndex); // Sort by year desc, then month desc
         this.calculateTotalBalance();
+        
+        // Format the amounts with the rupees symbol and commas for the table
+        this.summaryData = this.summaryData.map(item => ({
+          ...item,
+          collectedAmount: '₹' + item.collectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+          spentAmount: '₹' + item.spentAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+          monthBalance: '₹' + item.monthBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        }));
       },
       (error) => {
         console.error('Error fetching summary data:', error);
@@ -49,7 +57,8 @@ export class SummaryComponent implements OnInit {
   }
 
   calculateTotalBalance(): void {
-    this.totalBalance = this.summaryData.reduce((sum, item) => sum + item.monthBalance, 0);
+    const total = this.summaryData.reduce((sum, item) => sum + item.monthBalance, 0);
+    this.totalBalance = '₹' + total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   goBack(): void {
