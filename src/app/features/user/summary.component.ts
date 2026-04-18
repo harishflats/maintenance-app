@@ -41,7 +41,9 @@ export class SummaryComponent implements OnInit {
             spentAmount,
             monthBalance,
             isNegative: monthBalance < 0,
-            isPositive: monthBalance > 0
+            isPositive: monthBalance > 0,
+            expenses: item.expenses || [],
+            isExpanded: false
           };
         }).sort((a, b) => b.year - a.year || b.monthIndex - a.monthIndex); // Sort by year desc, then month desc
         this.calculateTotalBalance();
@@ -52,7 +54,11 @@ export class SummaryComponent implements OnInit {
           collectedAmount: '₹' + item.collectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
           spentAmount: '₹' + item.spentAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
           monthBalanceRaw: item.monthBalance,
-          monthBalance: (item.monthBalance < 0 ? '-' : '') + '₹' + Math.abs(item.monthBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+          monthBalance: (item.monthBalance < 0 ? '-' : '') + '₹' + Math.abs(item.monthBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+          expenses: item.expenses.map((e: any) => ({
+            ...e,
+            amountFormatted: '₹' + (Number(e.amount) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+          }))
         }));
       },
       (error) => {
@@ -70,5 +76,9 @@ export class SummaryComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/user']);
+  }
+
+  toggleExpand(item: any): void {
+    item.isExpanded = !item.isExpanded;
   }
 }

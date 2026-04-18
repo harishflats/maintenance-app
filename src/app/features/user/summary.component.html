@@ -14,14 +14,39 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of summaryData">
-        <td>{{ item.month }} {{ item.year }}</td>
-        <td>{{ item.collectedAmount }}</td>
-        <td>{{ item.spentAmount }}</td>
-        <td [ngStyle]="{'color': item.isNegative ? '#ff4d4d' : (item.isPositive ? '#4ade80' : 'inherit')}">
-          {{ item.monthBalance }}
-        </td>
-      </tr>
+      <ng-container *ngFor="let item of summaryData">
+        <tr>
+          <td>{{ item.month }} {{ item.year }}</td>
+          <td>{{ item.collectedAmount }}</td>
+          <td>
+            <div style="display: flex; align-items: center; white-space: nowrap;">
+              <span>{{ item.spentAmount }}</span>
+              <button (click)="toggleExpand(item)" style="background: none; border: none; cursor: pointer; color: #0a9bc9; font-weight: bold; margin-left: 8px; padding: 0;" title="Toggle Details">
+                {{ item.isExpanded ? '[-]' : '[+]' }}
+              </button>
+            </div>
+          </td>
+          <td [ngStyle]="{'color': item.isNegative ? '#ff4d4d' : (item.isPositive ? '#4ade80' : 'inherit')}">
+            {{ item.monthBalance }}
+          </td>
+        </tr>
+        <tr *ngIf="item.isExpanded">
+          <td colspan="4" style="background-color: #f8f9fa; padding: 12px 20px; border-bottom: 2px solid #e2e8f0; text-align: left;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: #2f3d62; font-size: 0.95rem;">Expense Breakdown</div>
+            <div style="font-size: 0.9rem; color: #515f79;">
+              <div *ngFor="let exp of item.expenses" style="display: flex; justify-content: space-between; border-bottom: 1px dashed #d7dce8; padding: 6px 0;">
+                <span>{{ exp.type || 'Unnamed Expense' }}</span>
+                <span style="font-weight: 600; color: #2a5bc0;">{{ exp.amountFormatted }}</span>
+              </div>
+              <div *ngIf="item.expenses.length === 0" style="padding: 6px 0; font-style: italic;">No expenses recorded.</div>
+              <div *ngIf="item.expenses.length > 0" style="display: flex; justify-content: space-between; border-top: 2px solid #d7dce8; padding: 8px 0 4px 0; margin-top: 4px;">
+                <span style="font-weight: 700; color: #2f3d62;">Total</span>
+                <span style="font-weight: 700; color: #ff4d4d;">{{ item.spentAmount }}</span>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
     </tbody>
     <tfoot>
       <tr>
