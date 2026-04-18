@@ -6,11 +6,11 @@
         Overall Balance: <span [ngClass]="{'positive': summary.overallBalance >= 0, 'negative': summary.overallBalance < 0}">
           ₹{{ summary.overallBalance | number: '1.2-2' }}
         </span>
-        <span>
-            <a class="header-link" (click)="navigateToSummary()">Expense Report</a>
-        </span>
+       
       </div>
-    
+     <div>
+            <a class="header-link" (click)="navigateToSummary()">Expense Report</a>
+        </div>
     </div>
     <div class="user-header-actions">
       
