@@ -79,6 +79,12 @@ export class SummaryComponent implements OnInit {
   }
 
   toggleExpand(item: any): void {
-    item.isExpanded = !item.isExpanded;
+    const wasExpanded = item.isExpanded;
+    
+    // Close all rows
+    this.summaryData.forEach(row => row.isExpanded = false);
+    
+    // Toggle the clicked row
+    item.isExpanded = !wasExpanded;
   }
 }
