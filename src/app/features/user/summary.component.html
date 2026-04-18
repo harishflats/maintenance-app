@@ -1,0 +1,31 @@
+<div class="back-button-container">
+  <button (click)="goBack()">Back</button>
+</div>
+
+<div class="summary-container">
+  <h1>Maintenance Summary</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Month & Year</th>
+        <th>Collected Amount</th>
+        <th>Spent Amount</th>
+        <th>Month Balance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of summaryData">
+        <td>{{ item.month }} {{ item.year }}</td>
+        <td>{{ item.collectedAmount }}</td>
+        <td>{{ item.spentAmount }}</td>
+        <td>{{ item.monthBalance }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3">Total Balance</td>
+        <td>{{ totalBalance }}</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

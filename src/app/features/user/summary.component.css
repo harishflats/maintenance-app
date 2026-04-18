@@ -1,0 +1,90 @@
+/* Styles for the summary page */
+.summary-container {
+  min-height: 100vh;
+  background: #f3f5f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.summary-container h1 {
+  font-size: 2rem;
+  color: #0a9bc9;
+  margin-bottom: 1.5rem;
+}
+
+.summary-container table {
+  width: 100%;
+  max-width: 800px;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.summary-container table th,
+.summary-container table td {
+  padding: 0.5rem; /* Reduced padding to remove extra space */
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-container table th {
+  background: #42b3e6;
+  color: white;
+  font-weight: 600;
+}
+
+.summary-container table tfoot td {
+  font-weight: bold;
+  background: #f3f5f9;
+}
+
+.summary-container table tbody tr:nth-child(odd) {
+  background-color: #f9f9f9; /* Light blue */
+}
+
+.summary-container table tbody tr:nth-child(even) {
+  background-color: #ffffff; /* White */
+}
+
+.summary-container button {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #42b3e6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s;
+}
+
+.summary-container button:hover {
+  background: #0a9bc9;
+}
+
+.back-button-container {
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem;
+}
+
+.back-button-container button {
+  padding: 0.5rem 1rem;
+  background: #42b3e6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s;
+}
+
+.back-button-container button:hover {
+  background: #0a9bc9;
+}

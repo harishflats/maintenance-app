@@ -47,6 +47,38 @@
   color: #ffb3b3;
 }
 
+.balance-link {
+  text-decoration: none;
+  color: #42b3e6;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.balance-link:hover {
+  color: #0a9bc9;
+}
+
+.user-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.header-link {
+  color: white;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: opacity 0.2s ease;
+}
+
+.header-link:hover {
+  opacity: 0.8;
+}
+
 .btn-logout {
   background-color: rgba(255, 255, 255, 0.22);
   color: white;
@@ -266,7 +298,7 @@ select:focus {
 @media (max-width: 720px) {
   .user-header {
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
@@ -277,6 +309,10 @@ select:focus {
   .user-header-left {
     flex: 1 1 0;
     min-width: 0;
+  }
+
+  .user-header-actions {
+    gap: 0.85rem;
   }
 
   .user-main {

@@ -13,6 +13,7 @@ import { takeUntil } from 'rxjs/operators';
 export class UserComponent implements OnInit, OnDestroy {
   maintenanceData: MaintenanceData;
   summary: Summary;
+  balance: number = 0;
   months = [
     { value: 1, label: 'January' },
     { value: 2, label: 'February' },
@@ -66,9 +67,41 @@ export class UserComponent implements OnInit, OnDestroy {
       .subscribe((data: MaintenanceData) => {
         this.maintenanceData = data;
         this.summary = this.dataService.getSummary();
+        this.calculateBalance();
       });
+
+    this.calculateBalance();
   }
 
+  calculateBalance(): void {
+    let totalCollected = 0;
+    let totalSpent = 0;
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('maintenance_')) {
+        try {
+          const data = JSON.parse(localStorage.getItem(key) || '{}');
+          const collected = (Number(data.amountPerPerson) || 0) * (Number(data.paidMembers) || 0);
+
+          let spent = 0;
+          if (data.expenses) {
+            if (Array.isArray(data.expenses)) {
+              spent = data.expenses.reduce((sum: number, exp: any) => sum + (Number(exp.amount) || 0), 0);
+            } else {
+              spent = Object.values(data.expenses).reduce((sum: number, val: any) => sum + (Number(val) || 0), 0);
+            }
+          }
+          totalCollected += collected;
+          totalSpent += spent;
+        } catch (e) {
+          console.error('Error parsing maintenance data from localStorage', e);
+        }
+      }
+    }
+    this.balance = totalCollected - totalSpent;
+  }
+ 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -102,5 +135,8 @@ export class UserComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+  navigateToSummary(): void {
+    this.router.navigate(['/summary']);
   }
 }

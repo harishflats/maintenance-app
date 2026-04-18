@@ -8,7 +8,10 @@
         </span>
       </div>
     </div>
-    <button class="btn btn-logout" (click)="logout()">Logout</button>
+    <div class="user-header-actions">
+      <a class="header-link" (click)="navigateToSummary()">View Summary</a>
+      <button class="btn btn-logout" (click)="logout()">Logout</button>
+    </div>
   </header>
 
   <main class="user-main">

@@ -4,6 +4,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { LoginComponent } from './features/auth/login.component';
 import { AdminComponent } from './features/admin/admin.component';
 import { UserComponent } from './features/user/user.component';
+import { SummaryComponent } from './features/user/summary.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'user',
     component: UserComponent,
+  },
+  {
+    path: 'summary',
+    component: SummaryComponent
   },
   {
     path: '',
