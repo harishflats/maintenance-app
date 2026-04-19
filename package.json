@@ -12,13 +12,15 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "deploy": "npx angular-cli-ghpages --dir=dist/maintenance-app"
+    "deploy": "npx angular-cli-ghpages --dir=dist/maintenance-app",
+    "firebase-build": "ng build --base-href /"
   },
   "dependencies": {
     "@angular/animations": "^16.2.0",
     "@angular/common": "^16.2.0",
     "@angular/compiler": "^16.2.0",
     "@angular/core": "^16.2.0",
+    "@angular/fire": "^16.0.0",
     "@angular/forms": "^16.2.0",
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
@@ -26,6 +28,7 @@
     "bootstrap": "^5.3.8",
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "firebase": "^10.14.1",
     "mongoose": "^9.4.1",
     "rxjs": "^7.8.2",
     "tslib": "^2.6.0",

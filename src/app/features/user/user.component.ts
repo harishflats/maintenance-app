@@ -139,4 +139,7 @@ export class UserComponent implements OnInit, OnDestroy {
   navigateToSummary(): void {
     this.router.navigate(['/summary']);
   }
+   navigateToContacts(): void {
+    this.router.navigate(['/contact']);
+  }
 }

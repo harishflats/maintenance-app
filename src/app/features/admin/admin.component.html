@@ -138,6 +138,39 @@
       </div>
     </section>
 
+    <section class="card">
+      <div class="card-header">
+        <h2>Upload Files</h2>
+      </div>
+      <div class="form-row" style="align-items: center;">
+        <div class="form-col">
+          <input type="file" (change)="onFileSelected($event)">
+        </div>
+        <div class="form-col">
+          <button class="btn" (click)="uploadFile()" [disabled]="!selectedFile || (uploadProgress !== null && uploadProgress < 100)">
+            Upload
+          </button>
+        </div>
+      </div>
+      <div *ngIf="uploadProgress !== null" class="form-row" style="margin-top: 1rem; align-items: center;">
+        <progress [value]="uploadProgress" max="100" style="width: 200px;"></progress>
+        <span style="margin-left: 1rem;">{{ uploadProgress | number:'1.0-0' }}%</span>
+      </div>
+      <div *ngIf="uploadURL" class="form-row" style="margin-top: 1rem;">
+        <span>File uploaded! <a [href]="uploadURL" target="_blank">View File</a></span>
+      </div>
+
+      <div *ngIf="$any(maintenanceData).uploadedFiles?.length > 0" class="form-row" style="margin-top: 1rem; display: block;">
+        <h3 style="margin-bottom: 0.5rem; font-size: 1.1em;">Uploaded Files</h3>
+        <ul style="list-style-type: none; padding: 0;">
+          <li *ngFor="let file of $any(maintenanceData).uploadedFiles; let i = index" style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px;">
+            <a [href]="file.url" target="_blank" style="color: #007bff; text-decoration: underline;">{{ file.name || 'File ' + (i + 1) }}</a>
+            <button type="button" class="btn btn-remove" style="padding: 2px 6px; font-size: 12px; min-width: auto;" (click)="removeFile(i)" title="Remove File">×</button>
+          </li>
+        </ul>
+      </div>
+    </section>
+
     <div class="action-row">
       <button class="btn btn-save" (click)="save()">Save Data</button>
     </div>

@@ -8,6 +8,7 @@ import { AuthModule } from './features/auth/auth.module';
 import { AdminModule } from './features/admin/admin.module';
 import { UserModule } from './features/user/user.module';
 import { LoadingInterceptor } from './core/services/loading.interceptor';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [

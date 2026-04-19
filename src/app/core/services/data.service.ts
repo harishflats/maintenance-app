@@ -16,6 +16,7 @@ export interface MaintenanceData {
   paidMembers: number;
   expenses: ExpenseItem[];
   comments: string;
+  uploadedFiles?: { name: string, url: string }[];
 }
 
 export interface Summary {
@@ -31,7 +32,7 @@ export interface Summary {
 export class DataService {
   private maintenanceDataSubject = new BehaviorSubject<MaintenanceData>(this.getInitialData());
   public maintenanceData$ = this.maintenanceDataSubject.asObservable();
- // private apiUrl = 'http://localhost:3001/api/maintenance';
+  //public apiUrl = 'http://localhost:3001/api/maintenance';
   private apiUrl ='https://maintenance-backend-zyo9.onrender.com/api/maintenance';
 
   private overallBalance: number = 0;
@@ -51,7 +52,8 @@ export class DataService {
         { id: '2', type: 'EB Bill', amount: 0 },
         { id: '3', type: 'Others', amount: 0 }
       ],
-      comments: ''
+      comments: '',
+      uploadedFiles: []
     };
   }
 
@@ -80,6 +82,7 @@ export class DataService {
     data.year = year;
     data.month = month;
     data.comments = data.comments || '';
+    data.uploadedFiles = data.uploadedFiles || [];
     return data as MaintenanceData;
   }
 

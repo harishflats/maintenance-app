@@ -5,11 +5,16 @@ import { LoginComponent } from './features/auth/login.component';
 import { AdminComponent } from './features/admin/admin.component';
 import { UserComponent } from './features/user/user.component';
 import { SummaryComponent } from './features/user/summary.component';
+import { ContactsComponent } from './features/user/contacts.component';
 
 const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+    {
+    path: 'contact',
+    component: ContactsComponent
   },
   {
     path: 'admin',

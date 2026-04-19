@@ -10,6 +10,8 @@
       </div>
      <div>
             <a class="header-link" (click)="navigateToSummary()">Expense Report</a>
+            <span style="margin: 0 10px; color: #ccc;">|</span>
+            <a class="header-link" (click)="navigateToContacts()"  style="cursor: pointer;">Contacts</a>
         </div>
     </div>
     <div class="user-header-actions">
@@ -88,6 +90,20 @@
           <span class="info-label">Paid Members</span>
           <span class="info-value">{{ maintenanceData.paidMembers }}</span>
         </div>
+      </div>
+    </section>
+
+    <section class="card" *ngIf="maintenanceData.uploadedFiles && maintenanceData.uploadedFiles.length > 0">
+      <h2>Uploaded Files</h2>
+      <div class="form-row" style="display: block; padding: 15px;">
+        <ul style="list-style-type: none; padding: 0; margin: 0;">
+          <li *ngFor="let file of maintenanceData.uploadedFiles; let i = index" style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.2em;">📄</span>
+            <a [href]="file.url" target="_blank" style="color: #007bff; text-decoration: underline; font-weight: 500;">
+              {{ file.name || 'File ' + (i + 1) }}
+            </a>
+          </li>
+        </ul>
       </div>
     </section>
 

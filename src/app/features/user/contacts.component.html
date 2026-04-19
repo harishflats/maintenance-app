@@ -1,0 +1,35 @@
+<div class="user-page">
+  <header class="user-header">
+    <div class="user-header-left">
+      <h1>Maintenance Tracker</h1>
+      <div style="margin-top: 10px;">
+        <a class="header-link" (click)="goBack()" style="cursor: pointer;">Home</a>
+        <span style="margin: 0 10px; color: #ccc;">|</span>
+        <span class="header-link" style="color: #64748b;">Contacts</span>
+      </div>
+    </div>
+    <div class="user-header-actions">
+      <button class="btn" (click)="goBack()">Back</button>
+    </div>
+  </header>
+
+  <main class="user-main">
+    <section class="card">
+      <h2>Contacts</h2>
+      <div class="contact-list">
+        <div class="contact-item" *ngFor="let contact of contacts">
+          <div class="contact-detail">
+            <span class="contact-icon">📞</span>
+            <div class="contact-text">
+              <span class="contact-service">{{ contact.service }}</span>
+              <span class="contact-person" *ngIf="contact.person">{{ contact.person }}</span>
+            </div>
+          </div>
+          <div class="contact-action">
+            <a [href]="'tel:' + contact.number">{{ contact.number }}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

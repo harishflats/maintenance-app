@@ -2,8 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService, MaintenanceData, Summary } from '../../core/services/data.service';
 import { AuthService } from '../auth/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-admin',
@@ -30,13 +32,17 @@ export class AdminComponent implements OnInit, OnDestroy {
   years: number[] = [];
   savedMessage = '';
   dbStatusMessage = '';
+  selectedFile: File | null = null;
+  uploadProgress: number | null = null;
+  uploadURL: string | null = null;
   private destroy$ = new Subject<void>();
 
   constructor(
     private dataService: DataService,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private http: HttpClient
   ) {
     this.maintenanceData = this.dataService.getCurrentData();
     this.summary = this.dataService.getSummary();
@@ -158,6 +164,67 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.savedMessage = 'Failed to save to database!';
       }
     });
+  }
+
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0] ?? null;
+    this.uploadURL = null;
+    this.uploadProgress = null;
+  }
+
+  uploadFile(): void {
+    if (!this.selectedFile) {
+      return;
+    }
+    const fileToUpload = this.selectedFile;
+    const url = `https://api.cloudinary.com/v1_1/${environment.cloudinary.cloudName}/auto/upload`;
+    const formData = new FormData();
+    formData.append('file', fileToUpload);
+    formData.append('upload_preset', environment.cloudinary.uploadPreset);
+    formData.append('folder', `uploads/${this.maintenanceData.year}/${this.maintenanceData.month}`);
+
+    this.uploadProgress = 0;
+    this.http.post(url, formData, {
+      reportProgress: true,
+      observe: 'events'
+    }).subscribe({
+      next: (event: any) => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.uploadProgress = Math.round(100 * event.loaded / (event.total || event.loaded));
+        } else if (event.type === HttpEventType.Response) {
+          this.uploadURL = event.body.secure_url;
+          this.savedMessage = 'File uploaded successfully!';
+
+          // Store in the maintenance data and auto-save to DB
+          const data = this.maintenanceData as any;
+          if (!data.uploadedFiles) {
+            data.uploadedFiles = [];
+          }
+          data.uploadedFiles.push({
+            name: fileToUpload.name,
+            url: event.body.secure_url
+          });
+          this.save();
+
+          setTimeout(() => (this.savedMessage = ''), 3000);
+          this.selectedFile = null;
+        }
+      },
+      error: (err) => {
+        console.error('Upload failed', err);
+        this.savedMessage = 'File upload failed!';
+        this.uploadProgress = null;
+        this.selectedFile = null;
+      }
+    });
+  }
+
+  removeFile(index: number): void {
+    const data = this.maintenanceData as any;
+    if (data.uploadedFiles) {
+      data.uploadedFiles.splice(index, 1);
+      this.save(); // Automatically save to DB after removing
+    }
   }
 
   sendWhatsAppMessage(): void {
