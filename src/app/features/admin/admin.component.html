@@ -4,7 +4,7 @@
       <h1>Admin Panel</h1>
       <div class="admin-overall-balance">
         Overall Balance: <span [ngClass]="{'positive': summary.overallBalance >= 0, 'negative': summary.overallBalance < 0}">
-          ₹{{ summary.overallBalance | number: '1.2-2' }}
+          {{ summary.overallBalance | rupee }}
         </span>
       </div>
     </div>
@@ -109,16 +109,16 @@
       <div class="summary-row">
         <div class="summary-item">
           <div class="summary-label">Total Collected</div>
-          <div class="summary-value">₹{{ summary.collected | number: '1.2-2' }}</div>
+          <div class="summary-value">{{ summary.collected | rupee }}</div>
         </div>
         <div class="summary-item">
           <div class="summary-label">Total Spent</div>
-          <div class="summary-value spent">₹{{ summary.spent | number: '1.2-2' }}</div>
+          <div class="summary-value spent">{{ summary.spent | rupee }}</div>
         </div>
         <div class="summary-item">
           <div class="summary-label">Monthly Balance</div>
           <div class="summary-value" [ngClass]="{'positive': summary.balance >= 0, 'negative': summary.balance < 0}">
-            ₹{{ summary.balance | number: '1.2-2' }}
+            {{ summary.balance | rupee }}
           </div>
         </div>
       </div>

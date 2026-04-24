@@ -5,6 +5,7 @@ import { UserComponent } from './user.component';
 import { SummaryComponent } from './summary.component';
 import { ContactsComponent } from './contacts.component';
 import { RouterModule } from '@angular/router';
+import { RupeePipe } from './rupee.pipe';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     FormsModule,
     RouterModule,
+    RupeePipe
   ]
 })
 export class UserModule { }

@@ -4,7 +4,7 @@
       <h1>Maintenance Tracker</h1>
       <div class="user-overall-balance">
         Overall Balance: <span [ngClass]="{'positive': summary.overallBalance >= 0, 'negative': summary.overallBalance < 0}">
-          ₹{{ summary.overallBalance | number: '1.2-2' }}
+          {{ summary.overallBalance | rupee }}
         </span>
        
       </div>
@@ -44,18 +44,18 @@
         <div class="summary-box">
           <div class="summary-icon">💰</div>
           <div class="summary-label">Collected</div>
-          <div class="summary-value">₹{{ summary.collected | number: '1.2-2' }}</div>
+          <div class="summary-value">{{ summary.collected | rupee }}</div>
         </div>
         <div class="summary-box">
           <div class="summary-icon">📤</div>
           <div class="summary-label">Spent</div>
-          <div class="summary-value spent">₹{{ summary.spent | number: '1.2-2' }}</div>
+          <div class="summary-value spent">{{ summary.spent | rupee }}</div>
         </div>
         <div class="summary-box">
           <div class="summary-icon">{{ summary.balance >= 0 ? '✅' : '⚠️' }}</div>
           <div class="summary-label">Monthly Balance</div>
           <div class="summary-value" [ngClass]="{'positive': summary.balance >= 0, 'negative': summary.balance < 0}">
-            ₹{{ summary.balance | number: '1.2-2' }}
+            {{ summary.balance | rupee }}
           </div>
         </div>
       </div>
@@ -69,12 +69,12 @@
             <span class="expense-icon">🧾</span>
             <span class="expense-text">{{ expense.type || 'Unnamed Expense' }}</span>
           </div>
-          <div class="expense-amount">₹{{ expense.amount | number: '1.2-2' }}</div>
+          <div class="expense-amount">{{ expense.amount | rupee }}</div>
         </div>
         
         <div class="expense-item total-expense-row">
           <div class="expense-text"><strong>Total Expenses</strong></div>
-          <div class="expense-amount spent"><strong>₹{{ summary.spent | number: '1.2-2' }}</strong></div>
+          <div class="expense-amount spent"><strong>{{ summary.spent | rupee }}</strong></div>
         </div>
       </div>
     </section>
@@ -84,7 +84,7 @@
       <div class="info-list">
         <div class="info-item">
           <span class="info-label">Amount per Member</span>
-          <span class="info-value">₹{{ maintenanceData.amountPerPerson | number: '1.2-2' }}</span>
+          <span class="info-value">{{ maintenanceData.amountPerPerson | rupee }}</span>
         </div>
         <div class="info-item">
           <span class="info-label">Paid Members</span>

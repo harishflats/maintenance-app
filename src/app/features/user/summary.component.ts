@@ -51,13 +51,13 @@ export class SummaryComponent implements OnInit {
         // Format the amounts with the rupees symbol and commas for the table
         this.summaryData = this.summaryData.map(item => ({
           ...item,
-          collectedAmount: '₹' + item.collectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-          spentAmount: '₹' + item.spentAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+          collectedAmount: '₹' + item.collectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+          spentAmount: '₹' + item.spentAmount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
           monthBalanceRaw: item.monthBalance,
-          monthBalance: (item.monthBalance < 0 ? '-' : '') + '₹' + Math.abs(item.monthBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+          monthBalance: (item.monthBalance < 0 ? '-' : '') + '₹' + Math.abs(item.monthBalance).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
           expenses: item.expenses.map((e: any) => ({
             ...e,
-            amountFormatted: '₹' + (Number(e.amount) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            amountFormatted: '₹' + (Number(e.amount) || 0).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
           }))
         }));
       },
@@ -71,7 +71,7 @@ export class SummaryComponent implements OnInit {
     const total = this.summaryData.reduce((sum, item) => sum + item.monthBalance, 0);
     this.isTotalNegative = total < 0;
     this.isTotalPositive = total > 0;
-    this.totalBalance = (total < 0 ? '-' : '') + '₹' + Math.abs(total).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    this.totalBalance = (total < 0 ? '-' : '') + '₹' + Math.abs(total).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   }
 
   goBack(): void {
