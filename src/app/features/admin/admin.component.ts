@@ -123,11 +123,13 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   incrementMembers(): void {
-    this.dataService.incrementPaidMembers();
+    const newValue = (this.maintenanceData.paidMembers || 0) + 1;
+    this.dataService.updatePaidMembers(newValue);
   }
 
   decrementMembers(): void {
-    this.dataService.decrementPaidMembers();
+    const currentValue = this.maintenanceData.paidMembers || 0;
+    this.dataService.updatePaidMembers(Math.max(0, currentValue - 1));
   }
 
   onExpenseTypeChange(id: string, amount: number, event: any): void {

@@ -58,6 +58,7 @@
               [(ngModel)]="maintenanceData.paidMembers"
               (change)="onPaidMembersInput($event)"
               min="0"
+              placeholder="0"
               readonly
             />
             <button class="btn-control" (click)="incrementMembers()">+</button>
