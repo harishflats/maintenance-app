@@ -48,7 +48,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.summary = this.dataService.getSummary();
     this.generateYears();
   }
-
+//test
   ngOnInit(): void {
     // Ensure only an admin can access this page.
     // This check is a safeguard; the AuthGuard should be the primary protection.
